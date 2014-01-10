@@ -8,12 +8,6 @@ class tomcat::config (
   $custom_catalina_properties = undef,
 ) inherits tomcat::params {
 
-  if $logging_template {
-    $log_template = $logging_template
-  } else {
-    $log_template = 'tomcat/logging.properties.erb'
-  }
-
   File {
     owner   => 'root',
     group   => 'root',
@@ -67,10 +61,17 @@ class tomcat::config (
     source  => $custom_catalina_properties,
   }
 
+  if $custom_logging {
+    $log_template = undef
+  } else {
+    $log_template = "template('tomcat/logging.properties.erb')"
+  }
+
   file {'logging.properties':
     ensure  => file,
     path    => $tomcat::params::logging_properties_path,
-    content => template($log_template),
+    content => $log_template,
+    source  => $custom_logging,
   }
 
 }

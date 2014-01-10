@@ -43,7 +43,7 @@ class tomcat (
   $server_loader              = undef,
   $handler_level              = 'FINE',
   $logger_level               = 'INFO',
-  $logging_template           = undef,
+  $custom_logging             = undef,
   $custom_catalina_policy     = undef,
   $custom_catalina_properties = undef,
 ) {
@@ -56,7 +56,7 @@ class tomcat (
     shared_loader              => $shared_loader,
     handler_level              => $handler_level,
     logger_level               => $logger_level,
-    logging_template           => $logging_template,
+    custom_logging             => $custom_logging,
     custom_catalina_policy     => $custom_catalina_policy,
     custom_catalina_properties => $custom_catalina_properties,
   }
