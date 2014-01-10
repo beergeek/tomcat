@@ -9,4 +9,32 @@
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
-include tomcat
+  include profiles::repos
+  class {'tomcat':
+    manage_java => true,
+  }
+
+  tomcat::instance {'daniel':
+    ensure         => 'present',
+    server_port    => '8012',
+    http_connector => true,
+    http_protocol  => 'HTTP/1.1',
+    http_port      => '8081',
+    http_addr      => $::ipaddress,
+    ajp_connector  => true,
+    ajp_protocol   => 'AJP/1.3',
+    ajp_port       => '8013',
+    ajp_addr       => $::ipaddress,
+  }
+  tomcat::instance {'brett':
+    ensure         => 'present',
+    server_port    => '8009',
+    http_connector => true,
+    http_protocol  => 'HTTP/1.1',
+    http_port      => '8080',
+    http_addr      => $::ipaddress,
+    ajp_connector  => true,
+    ajp_protocol   => 'AJP/1.3',
+    ajp_port       => '8010',
+    ajp_addr       => $::ipaddress,
+  }
