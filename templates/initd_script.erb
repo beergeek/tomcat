@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# tomcat7
+#
+# chkconfig: - 85 15
+# description: Jakarta Tomcat Java Servlets and JSP server
+# processname: java
+# pidfile: /var/run/tomcat7/pid
+
+. /etc/rc.d/init.d/functions
+
+# Set Tomcat environment.
+USER=<%= scope['tomcat::params::tomcat_user'] %>
+LOCKFILE=/var/lock/tomcat7
+export BASEDIR=<%= scope["tomcat::params::tomcat_dir"] %>
+export TOMCAT_HOME=$BASEDIR
+export CATALINA_BASE=<%= @t_dir %>
+export CATALINA_PID=<%= @t_dir %>/pid/pid
+export CATALINA_OPTS="-DHOME=$BASEDIR/home -Xmx<%= @java_xmx %> -Djava.awt.headless=<%= @djava_awt_headless %> -Dsun.java2d.opengl=<%= @dsun_java2d_opengl %> -XX:MaxPermSize=<%= @java_xx_maxpermsize %>"
+
+case "$1" in
+  start)
+        echo -n "Starting tomcat7: "
+        status -p $CATALINA_PID tomcat7 > /dev/null && failure || (su -p -s /bin/sh $USER -c "$TOMCAT_HOME/bin/catalina.sh start" > /dev/null && (touch $LOCKFILE ; success))
+        echo
+        ;;
+  stop)
+        echo -n "Shutting down tomcat7: "
+        status -p $CATALINA_PID tomcat7 > /dev/null && su -p -s /bin/sh $USER -c "$TOMCAT_HOME/bin/catalina.sh stop" > /dev/null && (rm -f $LOCKFILE ; success) || failure
+        echo
+        ;;
+  restart)
+        $0 stop
+        $0 start
+        ;;
+  condrestart)
+       [ -e $LOCKFILE ] && $0 restart
+       ;;
+  status)
+        status -p $CATALINA_PID tomcat7
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|condrestart|status}"
+        exit 1
+        ;;
+esac

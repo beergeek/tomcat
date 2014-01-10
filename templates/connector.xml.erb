@@ -1,0 +1,12 @@
+<!-- FILE CONTROLLED BY PUPPET -->
+<Connector URIEncoding="<%= @uri_encoding %>" 
+  port="<%= @port %>" 
+  address="<%= @address %>"
+<% if @scheme -%>
+  scheme="<%= @scheme %>"
+<% end -%>
+  <%= @options.collect! {|i| "#{i}" }.join("\n") %>
+  protocol="<%= @protocol %>" 
+  connectionTimeout="<%= @timeout %>" 
+  redirectPort="<%= @redirect_port %>" 
+/>
