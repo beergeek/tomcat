@@ -88,7 +88,7 @@ describe('tomcat', :type => :class) do
        'owner'  => 'root',
        'group'  => 'root',
        'mode'   => '0600', #should be 0700, but this occurs on the node, not in the catalog
-     }).that_requires('Package[tomcat]')
+     })
    end
 
    it do
